@@ -26,16 +26,6 @@ def is_negative(binary_list):
     return True if binary_list[0] is '-' else False
 
 
-# makes two numbers the same length
-def modify_len(modified_list, target_list):
-    while len(modified_list) < len(target_list):        #TODO: find way to get rid of operator here
-        if not is_negative(modified_list):
-            modified_list = ['0'] + modified_list
-        else:
-            modified_list = ['-'] + make_pos_bin(modified_list)
-    return modified_list
-
-
 # if the binary numbers are zero up to the specified digit
 def rest_are_zeros(lis, digit):
     for i in range(digit):
@@ -62,6 +52,15 @@ def make_neg_bin(binary_list):
     if binary_list[0] is not '-':
         binary_list = ['-'] + binary_list
     return binary_list
+
+
+# makes two numbers the same length
+def modify_len(modified_list, target_list):
+    difference = subtract(len(modified_list), len(target_list))
+    if is_negative(get_bin_list(difference)):
+        for i in range(make_pos_num(difference)):
+            modified_list = ['0'] + modified_list
+    return modified_list
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -91,6 +90,7 @@ def is_greater_than(big_bin_num, small_bin_num):
 
 # ---------------------------------------------------------------------------------------------------------------------
 # TODO: add user sanitation
+
 
 # make binary numbers add
 def add(num_one, num_two):
@@ -135,8 +135,11 @@ def add_one_to_digit(binary_list, digit):
 # ----------------------------------------------------------------------------------------------------------------------
 # TODO: add user sanitation
 
-# make binary numbers subtract.
+# make binary numbers subtract. Subtracting num2 from num1.
 def subtract(num_one, num_two):
+    if num_one is num_two:
+        return 0
+
     num_one = modify_len(get_bin_list(num_one), get_bin_list(num_two))
     num_two = modify_len(get_bin_list(num_two), num_one)
 
@@ -173,8 +176,9 @@ def minus_one_from_digit(binary_list, digit):
 # ----------------------------------------------------------------------------------------------------------------------
 
 
+# TODO: add user sanitation
 # make int numbers multiply
-def multiply(num_one, num_two):                                     # TODO: add user sanitation & check if can simplify
+def multiply(num_one, num_two):
     if is_negative(get_bin_list(num_one)) and not is_negative(get_bin_list(num_two)):          # case: multiply(-100, 2)
         return make_neg_num(multiply(make_pos_num(num_one), num_two))
     elif not is_negative(get_bin_list(num_one)) and is_negative(get_bin_list(num_two)):        # case: multiply(100, -2)
@@ -188,8 +192,9 @@ def multiply(num_one, num_two):                                     # TODO: add 
         return num_one
 
 
+# TODO: atm divide can only do positive integers.
 # make int numbers divide
-def divide(num_one, num_two):                                                               # TODO: atm divide can only do positive integers.
+def divide(num_one, num_two):
     if not is_negative(get_bin_list(num_one)) and not is_negative(get_bin_list(num_two)):   # case: divide(100, 2)
         if is_greater_than(get_bin_list(num_two), get_bin_list(num_one)):
             print('This function can only return values that are integers. Dividing these arguments gives a decimal.')
@@ -206,10 +211,3 @@ def divide(num_one, num_two):                                                   
         return make_neg_num(divide(make_pos_num(num_one), num_two))
     else:                                                                                   # case: divide(-100, -2)
         return divide(make_pos_num(num_one), make_pos_num(num_two))
-
-
-# make int numbers raise to power
-
-
-# route of int numbers?
-
